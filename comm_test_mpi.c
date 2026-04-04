@@ -42,7 +42,7 @@ void client_task(int my_rank)
 {
         // creates and initialies transmission variables
 		int uni_size;
-		uni_size = 0
+		uni_size = 0;
         int send_message, count, dest, tag;
         send_message = dest = tag = 0;
         count = 1;
