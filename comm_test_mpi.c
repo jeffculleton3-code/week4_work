@@ -24,7 +24,7 @@ int main(int argc, char **argv)
 		//check universe size
         if (uni_size > 1)
         {
-                check_task(int uni_size, int my_rank, int num_arg)
+                check_task(uni_size, my_rank);
 			
         } // end if (uni_size > 1)
         else // i.e. uni_size <=1
@@ -53,10 +53,6 @@ void client_task(int my_rank)
 
         // sends the message
         MPI_Send(&send_message, count, MPI_INT, dest, tag, MPI_COMM_WORLD);
-
-        // prints the message from the sender
-        printf("Hello, I am %d of %d. Sent %d to Rank %d\n",
-                         my_rank, uni_size, send_message, dest);
         
 }
 
@@ -83,7 +79,7 @@ int root_size(int uni_size)
         }// end for (int their_rank = 1; their_rank < uni_size; their_rank++)
 }
 
-void check_task(int uni_size, int my_rank, int num_arg)
+void check_task(int uni_size, int my_rank)
 {
 	// checks which process is running and calls the appropriate task
 	if (0 == my_rank)
@@ -93,5 +89,9 @@ void check_task(int uni_size, int my_rank, int num_arg)
 	else // i.e. (0 != my_rank)
 	{
 		client_task(my_rank);
+		
+        // prints the message from the sender
+        printf("Hello, I am %d of %d. Sent %d to Rank %d\n",
+                         my_rank, uni_size, send_message, dest);
 	} // end else // i.e. (0 != my_rank)
 }
