@@ -72,7 +72,15 @@ int main(int argc, char **argv)
 void client_task(int my_rank, int num_arg)
 {
         // creates and initialies transmission variables
-        int send_message, count, dest, tag;
+        int send_message, recv_message, count, dest, source, tag;
+        send_message = recv_message = dest = source = tag = 0;
+        count = 1;
+
+        // sets the destination for the message
+        dest = 0; // destination is root
+
+        // creates the message
+        send_message = my_rank * 10;
 
         // sends the message
         MPI_Send(&send_message, count, MPI_INT, dest, tag, MPI_COMM_WORLD);
