@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <mpi.h>
 
-void client_task(int my_rank)
-int root_size(int uni_size)
-void check_task(int uni_size, int my_rank, int num_arg)
+void client_task(int my_rank);
+int root_size(int uni_size);
+void check_task(int uni_size, int my_rank, int num_arg);
 
 int main(int argc, char **argv)
 {
