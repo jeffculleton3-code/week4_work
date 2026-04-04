@@ -43,15 +43,7 @@ int main(int argc, char **argv)
                 } // end if (0 == my_rank)
                 else // i.e. (0 != my_rank)
                 {
-                        // sets the destination for the message
-                        dest = 0; // destination is root
-
-                        // creates the message
-                        send_message = my_rank * 10;
-
-                        // sends the message
-                        MPI_Send(&send_message, count, MPI_INT, dest, tag, MPI_COMM_WORLD);
-
+                        send_message(my_rank)
                         // prints the message from the sender
                         printf("Hello, I am %d of %d. Sent %d to Rank %d\n",
                                          my_rank, uni_size, send_message, dest);
@@ -67,4 +59,16 @@ int main(int argc, char **argv)
         // finalise MPI
         ierror = MPI_Finalize();
         return 0;
+}
+
+int send_message(int my_rank)
+{
+                        // sets the destination for the message
+                        dest = 0; // destination is root
+
+                        // creates the message
+                        send_message = my_rank * 10;
+
+                        // sends the message
+                        MPI_Send(&send_message, count, MPI_INT, dest, tag, MPI_COMM_WORLD);
 }
