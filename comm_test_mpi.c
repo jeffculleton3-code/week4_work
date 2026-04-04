@@ -1,6 +1,10 @@
 #include <stdio.h>
 #include <mpi.h>
 
+void client_task(int my_rank)
+int root_size(int uni_size)
+void check_task(int uni_size, int my_rank, int num_arg)
+
 int main(int argc, char **argv)
 {
         // declare and initialise error handling variable
@@ -69,11 +73,11 @@ int main(int argc, char **argv)
         return 0;
 }
 
-void client_task(int my_rank, int num_arg)
+void client_task(int my_rank)
 {
         // creates and initialies transmission variables
-        int send_message, recv_message, count, dest, source, tag;
-        send_message = recv_message = dest = source = tag = 0;
+        int send_message, count, dest, tag;
+        send_message = dest = tag = 0;
         count = 1;
 
         // sets the destination for the message
@@ -84,5 +88,45 @@ void client_task(int my_rank, int num_arg)
 
         // sends the message
         MPI_Send(&send_message, count, MPI_INT, dest, tag, MPI_COMM_WORLD);
+
+        // prints the message from the sender
+        printf("Hello, I am %d of %d. Sent %d to Rank %d\n",
+                         my_rank, uni_size, send_message, dest);
         
+}
+
+int root_size(int uni_size)
+{
+        // creates and initialies transmission variables
+	int recv_message, count, source, tag;
+	recv_message = source = tag = 0;
+	count = 1;
+	MPI_Status status;
+
+        // iterates through all the other ranks
+        for (int their_rank = 1; their_rank < uni_size; their_rank++)
+        {
+                // sets the source argument to the rank of the sender
+                source = their_rank;
+
+                // receives the messages
+                MPI_Recv(&recv_message, count, MPI_INT, source, tag, MPI_COMM_WORLD, &status);
+
+                // prints the message from the sender
+                printf("Hello, I am %d of %d. Received %d from Rank %d\n",
+                                my_rank, uni_size, recv_message, source);
+        }// end for (int their_rank = 1; their_rank < uni_size; their_rank++)
+}
+
+void check_task(int uni_size, int my_rank, int num_arg)
+{
+	// checks which process is running and calls the appropriate task
+	if (0 == my_rank)
+	{
+		root_task(uni_size);
+	} // end if (0 == my_rank)
+	else // i.e. (0 != my_rank)
+	{
+		client_task(my_rank);
+	} // end else // i.e. (0 != my_rank)
 }
