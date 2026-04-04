@@ -41,6 +41,8 @@ int main(int argc, char **argv)
 void client_task(int my_rank)
 {
         // creates and initialies transmission variables
+		int uni_size;
+		uni_size = 0
         int send_message, count, dest, tag;
         send_message = dest = tag = 0;
         count = 1;
@@ -53,6 +55,11 @@ void client_task(int my_rank)
 
         // sends the message
         MPI_Send(&send_message, count, MPI_INT, dest, tag, MPI_COMM_WORLD);
+
+				
+        // prints the message from the sender
+        printf("Hello, I am %d of %d. Sent %d to Rank %d\n",
+                         my_rank, uni_size, send_message, dest);
         
 }
 
@@ -92,8 +99,5 @@ void check_task(int uni_size, int my_rank)
 	{
 		client_task(my_rank);
 		
-        // prints the message from the sender
-        printf("Hello, I am %d of %d. Sent %d to Rank %d\n",
-                         my_rank, uni_size, send_message, dest);
 	} // end else // i.e. (0 != my_rank)
 }
