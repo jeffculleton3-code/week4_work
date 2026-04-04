@@ -2,7 +2,7 @@
 #include <mpi.h>
 
 void client_task(int my_rank);
-int root_size(int uni_size);
+int root_task(int uni_size);
 void check_task(int uni_size, int my_rank);
 
 int main(int argc, char **argv)
@@ -56,7 +56,7 @@ void client_task(int my_rank)
         
 }
 
-int root_size(int uni_size)
+int root_task(int uni_size)
 {
     // creates and initialies transmission variables
 	int my_rank;
