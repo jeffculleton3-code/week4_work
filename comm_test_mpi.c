@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <mpi.h>
 
-void client_task(int my_rank);
+void client_task(int my_rank, int uni_size);
 int root_task(int uni_size);
 void check_task(int uni_size, int my_rank);
 
@@ -38,11 +38,9 @@ int main(int argc, char **argv)
         return 0;
 }
 
-void client_task(int my_rank)
+void client_task(int my_rank, int uni_size)
 {
         // creates and initialies transmission variables
-		int uni_size;
-		uni_size = 0;
         int send_message, count, dest, tag;
         send_message = dest = tag = 0;
         count = 1;
@@ -97,7 +95,7 @@ void check_task(int uni_size, int my_rank)
 	} // end if (0 == my_rank)
 	else // i.e. (0 != my_rank)
 	{
-		client_task(my_rank);
+		client_task(my_rank, uni_size);
 		
 	} // end else // i.e. (0 != my_rank)
 }
