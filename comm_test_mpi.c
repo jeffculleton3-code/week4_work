@@ -84,6 +84,7 @@ int root_task(int uni_size)
                 printf("Hello, I am %d of %d. Received %d from Rank %d\n",
                                 my_rank, uni_size, recv_message, source);
         }// end for (int their_rank = 1; their_rank < uni_size; their_rank++)
+		return 0;
 }
 
 void check_task(int uni_size, int my_rank)
