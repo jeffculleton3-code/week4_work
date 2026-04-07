@@ -30,6 +30,9 @@ int main(int argc, char **argv)
 		void * buffer = malloc(buffer_size);
 		MPI_Buffer_attach(buffer, buffer_size);
 
+		//Request for Isend
+		MPI_Request request;
+
 		//check universe size
         if (uni_size > 1)
         {
@@ -66,7 +69,7 @@ void client_task(int my_rank, int uni_size)
         send_message = my_rank * 10;
 
         // sends the message
-        MPI_Rsend(&send_message, count, MPI_INT, dest, tag, MPI_COMM_WORLD);
+        MPI_Isend(&send_message, count, MPI_INT, dest, tag, MPI_COMM_WORLD, &request);
 
 				
         // prints the message from the sender
@@ -92,7 +95,8 @@ int root_task(int uni_size)
                 source = their_rank;
 
                 // receives the messages
-                MPI_Recv(&recv_message, count, MPI_INT, source, tag, MPI_COMM_WORLD, &status);
+                MPI_IRecv(&recv_message, count, MPI_INT, source, tag, MPI_COMM_WORLD, &request);
+				MPI_Wait(&request, &status)
 
                 // prints the message from the sender
                 printf("Hello, I am %d of %d. Received %d from Rank %d\n",
