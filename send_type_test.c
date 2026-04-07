@@ -27,7 +27,7 @@ int main(int argc, char **argv)
 		MPI_Pack_size( 1, MPI_INT, MPI_COMM_WORLD, &s);
      	int buffer_size = s + MPI_BSEND_OVERHEAD;
 
-		void * buffer malloc(buffer_size);
+		void * buffer = malloc(buffer_size);
 		MPI_Buffer_attach(buffer, buffer_size);
 
 		//check universe size
