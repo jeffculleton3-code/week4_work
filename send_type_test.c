@@ -58,6 +58,8 @@ void client_task(int my_rank, int uni_size)
         int send_message, count, dest, tag;
         send_message = dest = tag = 0;
         count = 1;
+		
+		MPI_Request request;
 
         // sets the destination for the message
         dest = 0; // destination is root
@@ -84,7 +86,6 @@ int root_task(int uni_size)
 	recv_message = source = tag = 0;
 	count = 1;
 	MPI_Status status;
-	MPI_Request request;
         // iterates through all the other ranks
         for (int their_rank = 1; their_rank < uni_size; their_rank++)
         {
