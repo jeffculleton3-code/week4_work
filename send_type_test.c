@@ -59,9 +59,6 @@ void client_task(int my_rank, int uni_size)
         send_message = dest = tag = 0;
         count = 1;
 
-		//Request for Isend
-		MPI_Request request;
-
         // sets the destination for the message
         dest = 0; // destination is root
 
@@ -69,7 +66,7 @@ void client_task(int my_rank, int uni_size)
         send_message = my_rank * 10;
 
         // sends the message
-        MPI_Isend(&send_message, count, MPI_INT, dest, tag, MPI_COMM_WORLD, &request);
+        MPI_Isend(&send_message, count, MPI_INT, dest, tag, MPI_COMM_WORLD, &status);
 		
 				
         // prints the message from the sender
