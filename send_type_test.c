@@ -95,7 +95,7 @@ int root_task(int uni_size)
                 source = their_rank;
 
                 // receives the messages
-                MPI_IRecv(&recv_message, count, MPI_INT, source, tag, MPI_COMM_WORLD, &request);
+                MPI_Irecv(&recv_message, count, MPI_INT, source, tag, MPI_COMM_WORLD, &request);
 				MPI_Wait(&request, &status);
 
                 // prints the message from the sender
