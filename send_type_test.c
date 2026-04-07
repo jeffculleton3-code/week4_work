@@ -21,6 +21,14 @@ int main(int argc, char **argv)
         ierror = MPI_Comm_rank(MPI_COMM_WORLD,&my_rank);
         ierror = MPI_Comm_size(MPI_COMM_WORLD,&uni_size);
 
+		//create buffer for Bsend
+		int s;
+		MPI_Pack_size( 1, MPI_INT, MPI_COMM_WORLD, &s);
+     	int buffer_size = s + MPI_BSEND_OVERHEAD;
+
+		void * buffer malloc(buffer_size);
+		MPI_Buffer_attach(buffer, buffer_size);
+
 		//check universe size
         if (uni_size > 1)
         {
@@ -33,6 +41,11 @@ int main(int argc, char **argv)
                 printf("Unable to communicate with less than 2 processes. MPI communicator size = %d\n", uni_size);
         }
 
+		//detach buffer
+		MPI_Buffer_detach(&buffer, &buffer_size);
+		free(buffer);
+
+			
         // finalise MPI
         ierror = MPI_Finalize();
         return 0;
@@ -52,7 +65,7 @@ void client_task(int my_rank, int uni_size)
         send_message = my_rank * 10;
 
         // sends the message
-        MPI_Ssend(&send_message, count, MPI_INT, dest, tag, MPI_COMM_WORLD);
+        MPI_Bsend(&send_message, count, MPI_INT, dest, tag, MPI_COMM_WORLD);
 
 				
         // prints the message from the sender
