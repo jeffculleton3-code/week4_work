@@ -54,7 +54,7 @@ void client_task(int my_rank)
         send_message = my_rank * 10;
 
         // sends the message
-        MPI_Send(&send_message, count, MPI_INT, dest, tag, MPI_COMM_WORLD);
+        MPI_Ssend(&send_message, count, MPI_INT, dest, tag, MPI_COMM_WORLD);
 
 				
         // prints the message from the sender
