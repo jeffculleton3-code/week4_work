@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <mpi.h>
+#include <stdlib.h>
 
 void client_task(int my_rank, int uni_size);
 int root_task(int uni_size);
