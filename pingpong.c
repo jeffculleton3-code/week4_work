@@ -5,7 +5,7 @@
 
 int check_args(int argc, char **argv);
 void root_task(int num_pings);
-void client_task(num_pings);
+void client_task(int num_pings);
 
 int main(int argc, char **argv)
 {
@@ -60,13 +60,12 @@ void root_task(int num_pings)
 }
 
 
-void client_task(int my_rank, int uni_size)
+void client_task(int num_pings)
 {
         // creates and initialies transmission variables
         int counter, count, source, dest, tag;
         dest = tag = 0;
         count = 1;
-		counter;
 		MPI_Status status;
 
 		while(1)
