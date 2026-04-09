@@ -5,13 +5,13 @@
 
 int check_args(int argc, char **argv);
 void root_task(int num_pings);
-void client_task(int my_rank, int uni_size);
+void client_task(num_pings);
 
 int main(int argc, char **argv)
 {
     int ierror = 0;
 
-	int num_pings = check_args(argc, **argv);
+	int num_pings = check_args(argc, argv);
 
     // declare and initialise rank and size varibles
     int my_rank;
@@ -21,7 +21,7 @@ int main(int argc, char **argv)
 
     // gets the rank and world size
     ierror = MPI_Comm_rank(MPI_COMM_WORLD,&my_rank);
-    ierror = MPI_Comm_size(MPI_COMM_WORLD,&uni_size);
+    ierror = MPI_Comm_size(MPI_COMM_WORLD,&num_pings);
 
 	if (0 == my_rank)
 	{
@@ -50,7 +50,7 @@ void root_task(int num_pings)
         while (counter < num_pings)
         {
 				//sends message to client
-				MPI_Send(&counter, count, MPI_INT, dest, tag MPI_COMM_WORLD);
+				MPI_Send(&counter, count, MPI_INT, dest, tag, MPI_COMM_WORLD);
                 // receives the messages from client
                 MPI_Recv(&counter, count, MPI_INT, source, tag, MPI_COMM_WORLD, &status);
 			
