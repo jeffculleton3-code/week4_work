@@ -22,7 +22,11 @@ int main(int argc, char **argv)
     // gets the rank and world size
     ierror = MPI_Comm_rank(MPI_COMM_WORLD,&my_rank);
     ierror = MPI_Comm_size(MPI_COMM_WORLD,&uni_size);
-
+	
+	// get start time
+	clock_t t; 
+    t = clock();
+	
 	if (0 == my_rank)
 	{
 		root_task(num_pings);
@@ -32,7 +36,15 @@ int main(int argc, char **argv)
 		client_task(num_pings);
 		
 	} // end else // i.e. (0 != my_rank)
-
+	
+	//find end time
+	t = clock() - t;
+	double time_taken = ((double)t)/CLOCKS_PER_SEC;
+	printf("elasped time: %fs\n", 
+					time_taken);
+	average_time = time_taken/num_pings;
+	printf("average time: %fs\n",
+					average_time);
 	
 	ierror = MPI_Finalize();
     return 0;
