@@ -40,11 +40,11 @@ int main(int argc, char **argv)
 	//find end time
 	end_time = MPI_Wtime();
 	double time_taken = end_time - start_time;
-	printf("elasped time: %fs\n", 
-					time_taken);
+	printf("elasped time of process %d: %fs\n", 
+					my_rank, time_taken);
 	double average_time = time_taken/num_pings;
-	printf("average time: %fs\n",
-					average_time);
+	printf("average time of process %d: %fs\n",
+					my_rank, average_time);
 	
 	ierror = MPI_Finalize();
     return 0;
