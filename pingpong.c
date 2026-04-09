@@ -56,7 +56,7 @@ void root_task(int num_pings)
 			
         }// end for (counter = num_pings}
 	
-		printf("number of pingpongs: %d", counter);
+		printf("number of pingpongs: %d\n", counter);
 }
 
 
@@ -100,7 +100,7 @@ int check_args(int argc, char **argv)
 	{
 		// raise an error
 		fprintf(stderr, "ERROR: You did not provide a numerical argument!\n");
-		fprintf(stderr, "Correct use: mpicc -n 4 ./program [NUMBER]\n");
+		fprintf(stderr, "Correct use: mpicc -n 2 ./program [NUMBER]\n");
 
 		// and exit COMPLETELY
 		exit (-1);
