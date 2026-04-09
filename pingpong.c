@@ -42,7 +42,7 @@ int main(int argc, char **argv)
 	double time_taken = ((double)t)/CLOCKS_PER_SEC;
 	printf("elasped time: %fs\n", 
 					time_taken);
-	average_time = time_taken/num_pings;
+	double average_time = time_taken/num_pings;
 	printf("average time: %fs\n",
 					average_time);
 	
