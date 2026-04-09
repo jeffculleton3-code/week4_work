@@ -14,14 +14,14 @@ int main(int argc, char **argv)
 	int num_pings = check_args(argc, argv);
 
     // declare and initialise rank and size varibles
-    int my_rank;
+    int my_rank, uni_size;
 
     // intitalise MPI
     ierror = MPI_Init(&argc, &argv);
 
     // gets the rank and world size
     ierror = MPI_Comm_rank(MPI_COMM_WORLD,&my_rank);
-    ierror = MPI_Comm_size(MPI_COMM_WORLD,&num_pings);
+    ierror = MPI_Comm_size(MPI_COMM_WORLD,&uni_size);
 
 	if (0 == my_rank)
 	{
@@ -46,7 +46,7 @@ void root_task(int num_pings)
 	count = dest = source = 1;
 	MPI_Status status;
 
-        // iterates through all the other ranks
+        // sends and recieves from client until desired number of processes is reached
         while (counter < num_pings)
         {
 				//sends message to client
@@ -64,7 +64,7 @@ void client_task(int num_pings)
 {
         // creates and initialies transmission variables
         int counter, count, source, dest, tag;
-        dest = tag = 0;
+        dest = tag = source = 0;
         count = 1;
 		MPI_Status status;
 
@@ -100,7 +100,7 @@ int check_args(int argc, char **argv)
 	{
 		// raise an error
 		fprintf(stderr, "ERROR: You did not provide a numerical argument!\n");
-		fprintf(stderr, "Correct use: mpicc -n 4 proof [NUMBER]\n");
+		fprintf(stderr, "Correct use: mpicc -n 4 ./program [NUMBER]\n");
 
 		// and exit COMPLETELY
 		exit (-1);
