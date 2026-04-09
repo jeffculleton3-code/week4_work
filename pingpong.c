@@ -3,9 +3,9 @@
 #include <time.h> 
 #include <stdlib.h>
 
-int check_args(int argc, char **argv)
-void root_task(int num_pings)
-void client_task(int my_rank, int uni_size)
+int check_args(int argc, char **argv);
+void root_task(int num_pings);
+void client_task(int my_rank, int uni_size);
 
 int main(int argc, char **argv)
 {
