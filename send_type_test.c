@@ -80,8 +80,8 @@ void client_task(int my_rank, int uni_size)
                          my_rank, uni_size, send_message, dest);
 		//find end time
 		t = clock() - t;
-		double time_taken = (double(t))/CLOCK_PER_SEC;
-		printf("%d took %ds to send", 
+		double time_taken = ((double)t)/CLOCKS_PER_SEC;
+		printf("%d took %fs to send", 
 						my_rank, time_taken);
         
 }
