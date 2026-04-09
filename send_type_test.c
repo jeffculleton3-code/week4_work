@@ -96,15 +96,16 @@ int root_task(int uni_size)
 	count = 1;
 	MPI_Status status;
 
-	// get start time
-	clock_t t; 
-    t = clock();
 	
         // iterates through all the other ranks
         for (int their_rank = 1; their_rank < uni_size; their_rank++)
         {
                 // sets the source argument to the rank of the sender
                 source = their_rank;
+
+				// get start time
+				clock_t t; 
+    			t = clock();
 
                 // receives the messages
                 MPI_Recv(&recv_message, count, MPI_INT, source, tag, MPI_COMM_WORLD, &status);
@@ -113,12 +114,13 @@ int root_task(int uni_size)
                 // prints the message from the sender
                 printf("Hello, I am %d of %d. Received %d from Rank %d\n",
                                 my_rank, uni_size, recv_message, source);
-        }// end for (int their_rank = 1; their_rank < uni_size; their_rank++)
-	//find end time
-	t = clock() - t;
-	double time_taken = ((double)t)/CLOCKS_PER_SEC;
-	printf("%d took %fs to send\n", 
+
+				//find end time
+				t = clock() - t;
+				double time_taken = ((double)t)/CLOCKS_PER_SEC;
+				printf("%d took %fs to send\n", 
 					my_rank, time_taken);
+        }// end for (int their_rank = 1; their_rank < uni_size; their_rank++)
 	return 0;
 }
 
