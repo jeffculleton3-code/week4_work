@@ -72,7 +72,7 @@ void client_task(int my_rank, int uni_size)
     	t = clock();
 	
         // sends the message
-        MPI_Send(&send_message, count, MPI_INT, dest, tag, MPI_COMM_WORLD, &request);
+        MPI_Send(&send_message, count, MPI_INT, dest, tag, MPI_COMM_WORLD);
 		
 		
         // prints the message from the sender
@@ -80,9 +80,9 @@ void client_task(int my_rank, int uni_size)
                          my_rank, uni_size, send_message, dest);
 		//find end time
 		t = clock() - t;
-		time_taken = (t)/CLOCK_PER_SEC;
+		double time_taken = (double(t))/CLOCK_PER_SEC;
 		printf("%d took %ds to send", 
-						my_rank, time_taken)
+						my_rank, time_taken);
         
 }
 
