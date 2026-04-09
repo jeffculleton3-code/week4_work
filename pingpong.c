@@ -23,9 +23,9 @@ int main(int argc, char **argv)
     ierror = MPI_Comm_rank(MPI_COMM_WORLD,&my_rank);
     ierror = MPI_Comm_size(MPI_COMM_WORLD,&uni_size);
 	
-	// get start time
-	clock_t t; 
-    t = clock();
+	// initialise start and end time
+	double start_time, end_time;
+    start_time = MPI_Wtime();
 	
 	if (0 == my_rank)
 	{
@@ -38,8 +38,8 @@ int main(int argc, char **argv)
 	} // end else // i.e. (0 != my_rank)
 	
 	//find end time
-	t = clock() - t;
-	double time_taken = ((double)t)/CLOCKS_PER_SEC;
+	end_time = MPI_Wtime();
+	double time_taken = end_time - start_time;
 	printf("elasped time: %fs\n", 
 					time_taken);
 	double average_time = time_taken/num_pings;
