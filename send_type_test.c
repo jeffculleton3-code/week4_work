@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <mpi.h>
 #include <stdlib.h>
+#include <time.h> 
 
 void client_task(int my_rank, int uni_size);
 int root_task(int uni_size);
@@ -29,7 +30,7 @@ int main(int argc, char **argv)
 
 		void * buffer = malloc(buffer_size);
 		MPI_Buffer_attach(buffer, buffer_size);
-
+	
 		//check universe size
         if (uni_size > 1)
         {
@@ -45,7 +46,6 @@ int main(int argc, char **argv)
 		//detach buffer
 		MPI_Buffer_detach(&buffer, &buffer_size);
 		free(buffer);
-
 			
         // finalise MPI
         ierror = MPI_Finalize();
@@ -67,13 +67,22 @@ void client_task(int my_rank, int uni_size)
         // creates the message
         send_message = my_rank * 10;
 
+		// get start time
+		clock_t t; 
+    	t = clock();
+	
         // sends the message
-        MPI_Isend(&send_message, count, MPI_INT, dest, tag, MPI_COMM_WORLD, &request);
+        MPI_Send(&send_message, count, MPI_INT, dest, tag, MPI_COMM_WORLD, &request);
 		
-				
+		
         // prints the message from the sender
         printf("Hello, I am %d of %d. Sent %d to Rank %d\n",
                          my_rank, uni_size, send_message, dest);
+		//find end time
+		t = clock() - t;
+		time_taken = (t)/CLOCK_PER_SEC;
+		printf("%d took %ds to send", 
+						my_rank, time_taken)
         
 }
 
