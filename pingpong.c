@@ -1,13 +1,20 @@
 #include <stdio.h>
 #include <mpi.h>
+#include <time.h> 
+#include <stdlib.h>
+
+int check_args(int argc, char **argv)
+void root_task(int num_pings)
+void client_task(int my_rank, int uni_size)
 
 int main(int argc, char **argv)
 {
     int ierror = 0;
 
+	int num_pings = check_args(argc, **argv);
+
     // declare and initialise rank and size varibles
-    int my_rank, uni_size;
-    my_rank = uni_size = 0;
+    int my_rank;
 
     // intitalise MPI
     ierror = MPI_Init(&argc, &argv);
@@ -16,8 +23,67 @@ int main(int argc, char **argv)
     ierror = MPI_Comm_rank(MPI_COMM_WORLD,&my_rank);
     ierror = MPI_Comm_size(MPI_COMM_WORLD,&uni_size);
 
-	//set counter to 0
-    int count = 0;
+	if (0 == my_rank)
+	{
+		root_task(num_pings);
+	} // end if (0 == my_rank)
+	else // i.e. (0 != my_rank)
+	{
+		client_task(num_pings);
+		
+	} // end else // i.e. (0 != my_rank)
+
+	
+	ierror = MPI_Finalize();
+    return 0;
+}
+
+void root_task(int num_pings)
+{
+    // creates and initialies transmission variables
+	int counter, count, source, dest, tag;
+	counter = tag = 0;
+	count = dest = source = 1;
+	MPI_Status status;
+
+        // iterates through all the other ranks
+        while (counter < num_pings)
+        {
+				//sends message to client
+				MPI_Send(&counter, count, MPI_INT, dest, tag MPI_COMM_WORLD);
+                // receives the messages from client
+                MPI_Recv(&counter, count, MPI_INT, source, tag, MPI_COMM_WORLD, &status);
+			
+        }// end for (counter = num_pings}
+	
+		printf("number of pingpongs: %d", counter);
+}
+
+
+void client_task(int my_rank, int uni_size)
+{
+        // creates and initialies transmission variables
+        int counter, count, source, dest, tag;
+        dest = tag = 0;
+        count = 1;
+		counter;
+		MPI_Status status;
+
+		while(1)
+		{
+			// recieves message from root
+			MPI_Recv(&counter, count, MPI_INT, source, tag, MPI_COMM_WORLD, &status);
+
+			//increment the counter by 1
+			counter++;
+			
+        	// sends the message to root
+        	MPI_Send(&counter, count, MPI_INT, dest, tag, MPI_COMM_WORLD);
+				
+        	if (counter >= num_pings)
+				break;
+		}
+        
 }
 
 int check_args(int argc, char **argv)
@@ -40,5 +106,5 @@ int check_args(int argc, char **argv)
 		// and exit COMPLETELY
 		exit (-1);
 	}
-	return num_arg;
+	return num_pings;
 }
