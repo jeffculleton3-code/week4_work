@@ -142,7 +142,7 @@ int vector_sum_p(int *array, int size, int rank, int num_proc)
         int chunk = size/num_proc;
   
         // Create a recieve buffer and initalise a sum to go with it
-        int recv_buf = malloc(chunk *sizeof(int));
+        int *recv_buf = malloc(chunk *sizeof(int));
 		int recv_sum = 0;
 
 		if (rank == root)
@@ -183,6 +183,6 @@ int vector_sum_p(int *array, int size, int rank, int num_proc)
                 final_sum += temp;
             }
          }
-		free(recv_buf)
+		free(recv_buf);
         return final_sum;
 }
