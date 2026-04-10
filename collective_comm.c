@@ -27,9 +27,6 @@ int main(int argc, char **argv)
         int* my_vector = malloc (num_arg * sizeof(int));
 
 
-        // sums the vector
-        int my_sum = vector_sum_p(my_vector, num_arg, rank, num_proc);
-
         // root process creates and initialises the array
         if (rank ==0)
         {
@@ -41,11 +38,18 @@ int main(int argc, char **argv)
                 {
                         my_vector[i] = i;
                 }
-                printf("Sum: %d\n", my_sum);
         }
 
-        MPI_Bcast(&my_vector, num_arg, MPI_INT, 0, MPI_COMM_WORLD);
-        
+        MPI_Bcast(my_vector, num_arg, MPI_INT, 0, MPI_COMM_WORLD);
+
+        // sums the vector
+        int my_sum = vector_sum_p(my_vector, num_arg, rank, num_proc);
+
+        //print the sum
+        if (rank == 0)
+        {
+                printf("Sum: %d\n", my_sum);
+        }
         // if we use malloc, must free when done!
         free(my_vector);
 
