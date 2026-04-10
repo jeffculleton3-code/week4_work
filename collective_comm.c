@@ -25,25 +25,27 @@ int main(int argc, char **argv)
         // creates a vector variable
         // int my_vector[num_arg]; // suffers issues for large vectors
         int* my_vector = malloc (num_arg * sizeof(int));
-        // and initialises every element to zero
-        initialise_vector(my_vector, num_arg, 0);
 
-
-        //makes a vector with all natural numbers up to num_arg - 1
-        for (int i = 0; i < num_arg; i++) 
-        {
-                my_vector[i] = i;
-        }
 
         // sums the vector
         int my_sum = vector_sum_p(my_vector, num_arg, rank, num_proc);
 
-        // prints the sum
+        // root process creates and initialises the array
         if (rank ==0)
         {
+                //initialises every element to zero
+                initialise_vector(my_vector, num_arg, 0);
+                
+                //makes a vector with all natural numbers up to num_arg - 1
+                for (int i = 0; i < num_arg; i++) 
+                {
+                        my_vector[i] = i;
+                }
                 printf("Sum: %d\n", my_sum);
         }
 
+        MPI_Bcast(&my_vector, num_arg, MPI_INT, 0, MPI_COMM_WORLD);
+        
         // if we use malloc, must free when done!
         free(my_vector);
 
