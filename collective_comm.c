@@ -28,7 +28,7 @@ int main(int argc, char **argv)
         int* my_vector = malloc (num_arg * sizeof(int));
 
         // initialise start and end time
-	double start_time, end_time;
+	    double start_time, end_time;
         start_time = MPI_Wtime();
         
         // root process creates and initialises the array
@@ -56,11 +56,13 @@ int main(int argc, char **argv)
         }
 
         //find end time
-	end_time = MPI_Wtime();
-	double time_taken = end_time - start_time;
-	printf("elasped time: %fs\n", 
-			        time_taken);
-	
+		end_time = MPI_Wtime();
+		double time_taken = end_time - start_time;
+		if (rank == 0)
+		{
+			printf("elasped time: %fs\n", 
+			        	time_taken);
+		}	
         
         // if we use malloc, must free when done!
         free(my_vector);
@@ -134,39 +136,26 @@ int check_args(int argc, char **argv)
 
 int vector_sum_p(int *array, int size, int rank, int num_proc)
 {  
-        int sum = 0;
         int root = 0;
-  
-        // First, determine the size of each job
+
+		// First, determine the size of each job
         int chunk = size/num_proc;
   
         // Next, work out what work to do
         int start = rank * chunk;
   
-        int stop = (rank + 1)* chunk;
-  
-        // now, do the sum just as before
-        for (int i = start; i < stop; i++) 
-        {
-          
-                 sum += array[i];
-          
-        }
-        // sum is the partial sum from start to end
-        // need to send this to the root
+        // sum array and store it
+        int sum = sum_vector(&array[start], chunk);
 
         int final_sum = 0;
         int temp;
         
         if (rank != root) 
         {
-          
                  MPI_Send(&sum, 1, MPI_INT, root, 0, MPI_COMM_WORLD);
-          
         }
         else //(rank == root)
         {
-          
             final_sum = sum;
 
             for (int i = 1; i < num_proc; i++) 
@@ -175,6 +164,5 @@ int vector_sum_p(int *array, int size, int rank, int num_proc)
                 final_sum += temp;
             }
          }
-
         return final_sum;
 }
