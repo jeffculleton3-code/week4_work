@@ -44,7 +44,7 @@ int main(int argc, char **argv)
                 }
         }
 
-        MPI_Bcast(my_vector, num_arg, MPI_INT, 0, MPI_COMM_WORLD);
+        
 
         // sums the vector
         int my_sum = vector_sum_p(my_vector, num_arg, rank, num_proc);
@@ -138,31 +138,51 @@ int vector_sum_p(int *array, int size, int rank, int num_proc)
 {  
         int root = 0;
 
-		// First, determine the size of each job
+		// Determine the size of each job
         int chunk = size/num_proc;
   
-        // Next, work out what work to do
-        int start = rank * chunk;
-  
-        // sum array and store it
-        int sum = sum_vector(&array[start], chunk);
+        // Create a recieve buffer and initalise a sum to go with it
+        int recv_buf = malloc(chunk *sizeof(int));
+		int recv_sum = 0;
+
+		if (rank == root)
+		{
+			// create the recieve vector
+			recv_sum = sum_vector(&array[0], chunk);
+
+			// send to other processes
+			for (int i = 1; i < num_proc; i++)
+			{
+				MPI_Send(&array[i *chunk], chunk, MPI_INT, i, 0, MPI_COMM_WORLD);
+			}
+		}
+		else
+		{
+			//recieve from root
+			MPI_Recv(recv_buf, chunk, MPI_INT, root, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+
+			recv_sum = sum_vector(recv_buf, chunk);
+		}
 
         int final_sum = 0;
         int temp;
         
         if (rank != root) 
         {
-                 MPI_Send(&sum, 1, MPI_INT, root, 0, MPI_COMM_WORLD);
+				 //send to root
+                 MPI_Send(&recv_sum, 1, MPI_INT, root, 1, MPI_COMM_WORLD);
         }
         else //(rank == root)
         {
-            final_sum = sum;
+            final_sum = recv_sum;
 
             for (int i = 1; i < num_proc; i++) 
             {
-                MPI_Recv(&temp, 1, MPI_INT, i, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+				//recieve from other proceeses
+                MPI_Recv(&temp, 1, MPI_INT, i, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
                 final_sum += temp;
             }
          }
+		free(recv_buf)
         return final_sum;
 }
