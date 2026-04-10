@@ -29,7 +29,7 @@ int main(int argc, char **argv)
         initialise_vector(my_vector, num_arg, 0);
 
 
-        // TODO: put some code here that makes a more meaningful vector
+        //makes a vector with all natural numbers up to num_arg - 1
         for (int i = 0; i < num_arg; i++) 
         {
                 my_vector[i] = i;
