@@ -147,7 +147,7 @@ int vector_sum_p(int *array, int size, int rank, int num_proc)
 		MPI_Scatter(array, chunk, MPI_INT, recv_buf, chunk, MPI_INT, root, MPI_COMM_WORLD);
 
 		// create and initialise the recieve sum
-		int recv_sum = sum_vector(&array[0], chunk);
+		int recv_sum = sum_vector(rec_buf, chunk);
 	
 		free(recv_buf);
 		
