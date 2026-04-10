@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <mpi.h>
+#include <time.h>
 
 // declares the functions that will be called within main
 // note how declaration lines are similar to the initial line
@@ -26,7 +27,10 @@ int main(int argc, char **argv)
         // int my_vector[num_arg]; // suffers issues for large vectors
         int* my_vector = malloc (num_arg * sizeof(int));
 
-
+        // initialise start and end time
+	double start_time, end_time;
+        start_time = MPI_Wtime();
+        
         // root process creates and initialises the array
         if (rank ==0)
         {
@@ -50,6 +54,14 @@ int main(int argc, char **argv)
         {
                 printf("Sum: %d\n", my_sum);
         }
+
+        //find end time
+	end_time = MPI_Wtime();
+	double time_taken = end_time - start_time;
+	printf("elasped time: %fs\n", 
+			        time_taken);
+	
+        
         // if we use malloc, must free when done!
         free(my_vector);
 
