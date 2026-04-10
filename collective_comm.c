@@ -140,34 +140,17 @@ int vector_sum_p(int *array, int size, int rank, int num_proc)
 
 		// Determine the size of each job
         int chunk = size/num_proc;
-  
-        // initalise a scalar sum
-		int recv_sum = 0;
 
-		if (rank == root)
-		{
-			// create the recieve vector
-			recv_sum = sum_vector(&array[0], chunk);
+		//create and initialise a recieve buffer
+		int *recv_buf = malloc(chunk *sizeof(int));
 
-			// send to other processes
-			for (int i = 1; i < num_proc; i++)
-			{
-				MPI_Send(&array[i *chunk], chunk, MPI_INT, i, 0, MPI_COMM_WORLD);
-			}
-		}
-		else
-		{
-			//create and initialise a recieve buffer
-			int *recv_buf = malloc(chunk *sizeof(int));
-			
-			//recieve from root
-			MPI_Recv(recv_buf, chunk, MPI_INT, root, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+		MPI_Scatter(array, chunk, MPI_INT, recv_buf, chunk, MPI_INT, root, MPI_COMM_WORLD);
 
-			recv_sum = sum_vector(recv_buf, chunk);
-
-			free(recv_buf);
-		}
-
+		// create and initialise the recieve sum
+		int recv_sum = sum_vector(&array[0], chunk);
+	
+		free(recv_buf);
+		
         int final_sum = 0;
         int temp;
         
