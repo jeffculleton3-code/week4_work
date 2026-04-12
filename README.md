@@ -6,7 +6,7 @@ MPI_Ssend makes the order of sent messages more likely to be ordered from lowest
 
 MPI_Bsend makes the order of sent messages even more unpredictable than MPI_send but the received messages seem to be more likely to be printed after the sent messages.
 
-MPI_Rsend and MPI_Isend seem to work similarly to MPI_send but can crash, the code used for this report never crashed due to a low processor limit of 16 making crashes very unlikely. 
+MPI_Rsend and MPI_Isend seem to work similarly to MPI_Send but can crash, the code used for this report never crashed due to a low processor limit of 16 making crashes very unlikely. 
 
 Benchmark:
 Sending takes a variable amount of time ranging from about 0.00002 seconds and 0.00008 seconds and receiving varies from about 0.00008 seconds and 0.0003 seconds.  
